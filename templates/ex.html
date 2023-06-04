@@ -40,3 +40,24 @@
 </body>
 </html>
 
+
+
+
+
+@app.route("/recommendations", methods=['GET', 'POST'])
+def recommendations():
+    if request.method == 'POST':
+        user_id = int(request.form['user_id'])
+        movie_title = request.form['movie_title']
+        
+        recommended_movies_genres = get_recommendations_genres(movie_title)
+        recommended_movies_collaborative_title = get_recommendations_collaborative(user_id)['title']
+        recommended_movies_collaborative_genres = get_recommendations_collaborative(user_id)['genres']
+        
+        return render_template('recommendations.html',
+                               user_id=user_id,
+                               movie_title=movie_title,              recommended_movies_genres=recommended_movies_genres,
+                               recommended_movies_collaborative_title=recommended_movies_collaborative_title, recommended_movies_collaborative_genres = recommended_movies_collaborative_genres)
+    else:
+        return render_template('index.html')
+

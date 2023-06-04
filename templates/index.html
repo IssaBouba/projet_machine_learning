@@ -1,27 +1,49 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Movie Recommender</title>
-    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet">
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet">
-    <style>
-        /* Ajoutez ici votre propre style CSS si nécessaire */
-    </style>
+    <title>Movie Recommendations</title>
+    <!-- Liens vers les bibliothèques CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+<link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+<script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
+
+    <!-- Liens vers les scripts JavaScript -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    
 </head>
 <body>
-    <div class="container mt-4">
-        <h1 class="mb-4">Movie Recommender</h1>
-        <form method="POST" action="/recommendations">
+    <!-- Barre de navigation -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <div class="container">
+            <a class="navbar-brand" href="#">Movie Recommendations</a>
+        </div>
+    </nav>
+
+    <!-- Contenu principal -->
+    <div class="container">
+        <h1 class="mt-4">Movie Recommendations</h1>
+        <form action="/recommendations" method="POST" class="mt-4">
             <div class="form-group">
-                <label for="movie_title">Enter a Movie Title:</label>
-                <input type="text" class="form-control" id="movie_title" name="movie_title" required>
+                <label for="user_id">User ID:</label>
+                <input type="number" id="user_id" name="user_id" class="form-control" required>
+            </div>
+            <div class="form-group">
+                <label for="movie_title">Movie Title:</label>
+                <input type="text" id="movie_title" name="movie_title" class="form-control" required>
             </div>
             <button type="submit" class="btn btn-primary">Get Recommendations</button>
         </form>
     </div>
 
-    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+    <!-- Pied de page -->
+    <footer class="bg-light text-center py-3 mt-4">
+        <div class="container">
+            <span>&copy; 2023 Movie Recommendations</span>
+        </div>
+    </footer>
 </body>
 </html>

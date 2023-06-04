@@ -1,34 +1,75 @@
+
 <!DOCTYPE html>
 <html>
 <head>
     <title>Movie Recommendations</title>
-    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet">
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet">
-    <style>
-        /* Ajoutez ici votre propre style CSS si nécessaire */
-    </style>
+    <!-- Liens vers les bibliothèques CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+
+    <!-- Liens vers les scripts JavaScript -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 </head>
 <body>
-    <div class="container mt-4">
-        <h1 class="mb-4">Movie Recommendations</h1>
-        
-        <div class="row">
-            {% for movie in recommended_movies %}
-            <div class="col-md-6">
-                <div class="card mb-4">
-                    <div class="card-body">
-                        <h5 class="card-title">{{ movie }}</h5>
-                        <p class="card-text">Genre: {{ movie_genre[movie_genre['title'] == movie]["genres"].values[0] }}</p>
-                       
+    <!-- Barre de navigation -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <div class="container">
+            <a class="navbar-brand" href="#">Movie Recommendations</a>
+        </div>
+    </nav>
+
+    <!-- Contenu principal -->
+    <div class="container">
+        <h1 class="mt-4">Movie Recommendations</h1>
+        <h2 class="mt-4">User ID: {{ user_id }}</h2>
+        <h2 class="mt-4">Movie Title: {{ movie_title }}</h2>
+        <div class="card mt-4">
+            <div class="card-body">
+                <h3 class="card-title">Recommended Movies (based on genres):</h3>
+                {% for movie in recommended_movies_genres %}
+                    <div class="card mb-3" style="background-color: {{ movie }};">
+                        <div class="card-body">
+                            <h5 class="card-title">{{ movie}}</h5>
+                            <p class="card-text">{{df_movies[df_movies['title']==movie]["genres"].values[0] }}</p>
+                        </div>
                     </div>
-                </div>
+                {% endfor %}
             </div>
-            {% endfor %}
+        </div>
+        <div class="card mt-4">
+            <div class="card-body">
+                <h3 class="card-title">Recommended Movies (based on collaborative filtering):</h3>
+                {% for title, genre in interv %}
+                    <div class="card mb-3" style="background-color: {{ movie }};">
+                        <div class="card-body">
+                            <h5 class="card-title">{{ title }}</h5>
+                            <p class="card-text">{{ genre }}</p>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+      <div class="card mt-4">
+            <div class="card-body">
+                <h3 class="card-title">Recommended Movies (based on popularity):</h3>
+                {% for movie in recommended_movies_popularity %}
+                    <div class="card mb-3" style="background-color: {{ movie }};">
+                        <div class="card-body">
+                            <h5 class="card-title">{{ movie}}</h5>
+                            <p class="card-text">{{movie_merge[movie_merge['title']==movie]["genres"].values[0] }}</p>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
         </div>
     </div>
 
-    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+    <!-- Pied de page -->
+    <footer class="bg-light text-center py-3 mt-4">
+        <div class="container">
+            <span>&copy; 2023 Movie Recommendations</span>
+        </div>
+    </footer>
 </body>
 </html>
