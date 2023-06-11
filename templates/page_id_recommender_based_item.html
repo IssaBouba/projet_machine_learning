@@ -570,6 +570,132 @@ main{
 .dots .dot.active{
     border-color: orange;
 }
+
+ 
+
+
+ .custom-select {
+        width: 400px; /* Adjust the width as needed */
+    }
+
+    .title-film{
+      margin-top: 0px;
+      padding-bottom: 7px;
+      padding-top: 7px;
+    }
+   .span-film-popular{
+     margin-left: 25px;
+     font-size: 30px;
+     
+   }
+   .block-title-film{
+     margin-bottom: 5px;
+     padding-bottom: 4px;
+     
+   }
+   .block-genre-film{
+     background-color:#22254b;  
+     border-radius: 50px; 
+     margin-bottom:10px;  
+     margin-top:0px; 
+     padding:5px 7px; 
+     color:#fff;
+     
+   }
+   .span-average-film{
+     margin-top:10px;
+     
+   }
+   .vue-film{
+     margin-top:20px;
+   }
+   .commentaire-film{
+     position:absolute; 
+     background-color: #fff; 
+     padding: 1rem; 
+     color:black; 
+     max-height: 100%; 
+     
+   }
+   .custom-select {
+  position: relative;
+  display: inline-block;
+  width: 600px; /* Ajustez la largeur selon vos besoins */
+  height: 38px;
+  line-height: 38px;
+  background-color: #fff;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  padding: 0 10px;
+  cursor: pointer;
+  overflow: hidden;
+}
+
+.custom-select select {
+  width: 100%;
+  height: 100%;
+  border: none;
+  outline: none;
+  background-color: transparent;
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+}
+
+.custom-select::after {
+  content: '\f078';
+  font-family: 'FontAwesome';
+  position: absolute;
+  top: 50%;
+  right: 10px;
+  transform: translateY(-50%);
+  font-size: 12px;
+  color: #555;
+  pointer-events: none;
+}
+
+.custom-select.open::after {
+  content: '\f077';
+}
+
+.custom-select.open select {
+  border-radius: 4px 4px 0 0;
+  border-bottom: none;
+}
+
+.custom-select.open ~ .select-items {
+  display: block;
+}
+
+.select-items {
+  position: absolute;
+  display: none;
+  background-color: #fff;
+  border: 1px solid #ccc;
+  border-top: none;
+  border-radius: 0 0 4px 4px;
+  top: 100%;
+  left: 0;
+  right: 0;
+  z-index: 99;
+  max-height: 200px;
+  overflow-y: auto;
+}
+
+.select-items div {
+  padding: 8px 10px;
+  cursor: pointer;
+}
+
+.select-items div:hover {
+  background-color: #f4f4f4;
+}
+
+.select-items .selected {
+  background-color: #f4f4f4;
+}
+
+
     </style> 
 </head>
 <body>
@@ -577,23 +703,31 @@ main{
  <header class="navbar">
         <h1>Recommender System Project</h1>
         <ul>
-            <li><a href="#">Accueil</a></li>
+            <li><a href="/">Accueil</a></li>
             <li><a href="#">À propos</a></li>
             <li><a href="#">Contact</a></li>
         </ul>
     </header>
 
     <!-- Contenu principal -->
-    <div class="container">
+  
+  <div style = "margin-left:20px">
         <h1 class="mt-4">Movie Recommendations</h1>
         <form action="/recommendations_based_item" method="POST" class="mt-4">
-            <div class="form-group">
-                <label for="movie_title" style = "color: white "><h3 style = "font-size: 40px">Movie Title :</h3></label>
-                <input type="text" id="movie_title" name="movie_title" class="form-control" required>
-            </div>
+           <div class="form-group">
+  <label for="movie_title" style="color: white;"><h3 style="font-size: 40px; margin-right: 45px">Movie Title :</h3></label>
+  <select class="form-select form-select-lg mb-3 custom-select" id="movie_title" name="movie_title" required>
+    <option selected>--select--</option>
+    {% for title in df_movies_links['title'] %}
+    <option value="{{title}}">{{title}}</option>
+    {% endfor %}
+  </select>
+</div>
+
             <button type="submit" class="btn btn-primary">Get Recommendations</button>
         </form>
  </div>
+  </div>
     <!-- Pied de page -->
     <!-- <div class="footer">
         &copy; 2023 Recommender System Project

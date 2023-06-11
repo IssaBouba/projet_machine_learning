@@ -27,8 +27,8 @@ movie_merge.rename(columns={
                    inplace=True)
 movie_merge['average_rating'] = np.round(movie_merge['average_rating'], 1)
 
-df_movies = df_movies_full.head(1000)
-df_ratings = df_ratings_full.head(1000)
+df_movies = df_movies_full.head(3000)
+df_ratings = df_ratings_full.head(3000)
 
 # filtrage collaboratif item-based: Méthode basée sur le contenu (pas besoin de données sur les utilisateurs)
 
@@ -42,7 +42,7 @@ def get_recommendations_genres(movie_title):
   movie_index = df_movies[df_movies['title'] == movie_title].index[0]
   similar_movies = list(enumerate(cosine_sim_genres[movie_index]))
   similar_movies = sorted(similar_movies, key=lambda x: x[1], reverse=True)
-  similar_movies = similar_movies[1:6]
+  similar_movies = similar_movies[1:11]
   similar_movie_indices = [movie[0] for movie in similar_movies]
   similar_movie_titles = df_movies.iloc[similar_movie_indices]['title']
   return similar_movie_titles
@@ -123,6 +123,7 @@ def home():
   recommended_popularity_adventure = get_recommendations_popularity(
   )['adventure']
   recommended_popularity_action = get_recommendations_popularity()['action']
+
   return render_template(
     'home.html',
     recommended_movies_popularity=recommended_movies_popularity,
@@ -133,9 +134,28 @@ def home():
     movie_merge=movie_merge)
 
 
+@app.route("/popular_film")
+def page_popular_film():
+  recommended_movies_popularity = get_recommendations_popularity()['all_movie']
+  recommended_popularity_comedy = get_recommendations_popularity()['comedy']
+  recommended_popularity_adventure = get_recommendations_popularity(
+  )['adventure']
+  recommended_popularity_action = get_recommendations_popularity()['action']
+
+  return render_template(
+    "popular_film.html",
+    recommended_movies_popularity=recommended_movies_popularity,
+    recommended_popularity_comedy=recommended_popularity_comedy,
+    recommended_popularity_action=recommended_popularity_action,
+    recommended_popularity_adventure=recommended_popularity_adventure,
+    df_movies_links=df_movies_links,
+    movie_merge=movie_merge)
+
+
 @app.route("/page_identification_based_item")
 def page_identification_based_item():
-  return render_template('page_id_recommender_based_item.html')
+  return render_template('page_id_recommender_based_item.html',
+                         df_movies_links=df_movies_links)
 
 
 @app.route("/recommendations_based_item", methods=['GET', 'POST'])
@@ -151,9 +171,17 @@ def recommendations_item():
                            recommended_movies_genres=recommended_movies_genres)
 
 
-@app.route("/page_identification_based_users")
+@app.route("/page_identification_based_user")
 def page_identification_based_users():
-  return render_template('page_id_recommender_based_users.html')
+  users_id = []
+  for user_id in range(1, 25):
+    try:
+      get_recommendations_collaborative(user_id=user_id, title=False)
+      users_id.append(user_id)
+    except Exception as e:
+      pass
+  return render_template('page_id_recommender_based_users.html',
+                         users_id=users_id)
 
 
 @app.route("/recommendations_based_users", methods=['GET', 'POST'])
@@ -168,7 +196,7 @@ def recommendations_users():
                            user_id=user_id,
                            df_movies_links=df_movies_links,
                            interv=interv,
-                          movie_merge=movie_merge)
+                           movie_merge=movie_merge)
 
 
 @app.route("/recommender_based_popularity", methods=['GET', 'POST'])

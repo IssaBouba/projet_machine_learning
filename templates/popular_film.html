@@ -1,8 +1,10 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Projet ML : Système de Recommendation de Films</title>
+   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" integrity="sha512-xkIzwu4pAUwzV13YcSq00++KB3I4E4Ya2fWJwFsj2u6G2FnyvG3bL13IR9mGj1+yyMYhZMOGZcYJ1GrXTX5MiQ==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+   
+
  <style>
          @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@200;400;700&display=swap');
         
@@ -559,38 +561,208 @@ main{
 .dots .dot.active{
     border-color: orange;
 }
-    </style>   
-      <title>Recommended Movies (based on users)</title>
+    .custom-select {
+        width: 400px; /* Adjust the width as needed */
+    }
+
+    .title-film{
+      margin-top: 0px;
+      padding-bottom: 7px;
+      padding-top: 7px;
+    }
+   .span-film-popular{
+     margin-left: 25px;
+     font-size: 30px;
+     
+   }
+   .block-title-film{
+     margin-bottom: 5px;
+     padding-bottom: 4px;
+     
+   }
+   .block-genre-film{
+     background-color:#22254b;  
+     border-radius: 50px; 
+     margin-bottom:10px;  
+     margin-top:0px; 
+     padding:5px 7px; 
+     color:#fff;
+     
+   }
+   .span-average-film{
+     margin-top:10px;
+     
+   }
+   .vue-film{
+     margin-top:20px;
+   }
+   .commentaire-film{
+     position:absolute; 
+     background-color: #fff; 
+     padding: 1rem; 
+     color:black; 
+     max-height: 100%; 
+     
+   }
+   .custom-select {
+  position: relative;
+  display: inline-block;
+  width: 400px; /* Ajustez la largeur selon vos besoins */
+  height: 38px;
+  line-height: 38px;
+  background-color: #fff;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  padding: 0 10px;
+  cursor: pointer;
+  overflow: hidden;
+}
+
+.custom-select select {
+  width: 100%;
+  height: 100%;
+  border: none;
+  outline: none;
+  background-color: transparent;
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+}
+
+.custom-select::after {
+  content: '\f078';
+  font-family: 'FontAwesome';
+  position: absolute;
+  top: 50%;
+  right: 10px;
+  transform: translateY(-50%);
+  font-size: 12px;
+  color: #555;
+  pointer-events: none;
+}
+
+.custom-select.open::after {
+  content: '\f077';
+}
+
+.custom-select.open select {
+  border-radius: 4px 4px 0 0;
+  border-bottom: none;
+}
+
+.custom-select.open ~ .select-items {
+  display: block;
+}
+
+.select-items {
+  position: absolute;
+  display: none;
+  background-color: #fff;
+  border: 1px solid #ccc;
+  border-top: none;
+  border-radius: 0 0 4px 4px;
+  top: 100%;
+  left: 0;
+  right: 0;
+  z-index: 99;
+  max-height: 200px;
+  overflow-y: auto;
+}
+
+.select-items div {
+  padding: 8px 10px;
+  cursor: pointer;
+}
+
+.select-items div:hover {
+  background-color: #f4f4f4;
+}
+
+.select-items .selected {
+  background-color: #f4f4f4;
+}
+
+
+    </style>  
+
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+
 </head>
 <body>
-    
-     <header class="navbar">
-        <h1>Système de Recommendation : Méthode basée sur les utilisateurs</h1>
+    <header class="navbar">
+        <h1> <span style = "margin-left: 25px; margin-bottom: 10px; padding-bottom: 8px; font-size: 80%;"">Système de Recommendation : Méthode basée sur la popularité des Films </span></h1>
         <ul>
-            <li><a href="#">Accueil</a></li>
+            <li><a href="/">Accueil</a></li>
             <li><a href="#">À propos</a></li>
             <li><a href="#">Contact</a></li>
         </ul>
-      
     </header>
+   <div id = "film-based-items" >
 
-    <main id="main">
-      {% for title, genre in interv %}
+</div>
+  
+   <div id = "popular-film">
+<h2  class="film-bar title-film" >
+  <span class = "span-film-popular">Top des 10 Films les plus populaires</span>
+</h2>
+     <div>
+        <main id="main">
+ 
+      {% for title in recommended_movies_popularity %}
       <div class = "movie">
       <img src= {{ df_movies_links[df_movies_links['title']==title]["image_link"].values[0] }} alt = "Image">
       <div class = "movie-info">
-        <div class = "border-bottom row" style = "margin-bottom: 5px; padding-bottom: 4px;">
+        <div class = "border-bottom row block-title-film">
            <div class = "col-9">
         <h3>{{ title}}</h3>
-          {% for genre in df_movies_links[df_movies_links['title']==title]["genres"].values[0].split("|") %}
-        <button type="button" class="btn btn-outline-primary" style = "background-color:#22254b;  border-radius: 50px; margin-bottom:10px;  margin-top:0px; padding:5px 7px; color:#fff">{{genre}}</button>
+             {% for genre in df_movies_links[df_movies_links['title']==title]["genres"].values[0].split("|") %}
+        <button type="button" class="btn btn-outline-primary block-genre-film">{{genre}}</button>
             {% endfor %}
         
         
       </div>
-          <div class = "col"><span class = "green" style = "margin-top:10px;">{{movie_merge[movie_merge['title']==title]["average_rating"].values[0]}}</span></div>
+          <div class = "col"><span class = "green span-average-film">{{movie_merge[movie_merge['title']==title]["average_rating"].values[0]}}</span></div>
           
           <div class = "col">
+            <span ><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-eye vue-film" viewBox="0 0 16 16">
+  <path d="M16 8s-3-5.5-8-5.5S0 8 0 8s3 5.5 8 5.5S16 8 16 8zM1.173 8a13.133 13.133 0 0 1 1.66-2.043C4.12 4.668 5.88 3.5 8 3.5c2.12 0 3.879 1.168 5.168 2.457A13.133 13.133 0 0 1 14.828 8c-.058.087-.122.183-.195.288-.335.48-.83 1.12-1.465 1.755C11.879 11.332 10.119 12.5 8 12.5c-2.12 0-3.879-1.168-5.168-2.457A13.134 13.134 0 0 1 1.172 8z"/>
+  <path d="M8 5.5a2.5 2.5 0 1 0 0 5 2.5 2.5 0 0 0 0-5zM4.5 8a3.5 3.5 0 1 1 7 0 3.5 3.5 0 0 1-7 0z"/>
+</svg>
+              <span> {{movie_merge[movie_merge['title']==title]["number_user"].values[0]}}
+             </span>
+          </span>
+          </div>
+      <div class = "overview commentaire-film" >
+        <h3> overview</h3>
+        <p>{{df_movies_links[df_movies_links['title']==title]["description"].values[0] }}</p>
+        </div>
+      </div>
+        </div>
+         </div>
+      {% endfor %}
+</div>
+        </main>
+<h2  class="film-bar">
+<span style = "margin-left: 25px; font-size: 30px;">Top des 10 Films Actions</span>
+  
+</h2>
+        <main id="main">
+ 
+      {% for title in recommended_popularity_action %}
+      <div class = "movie">
+      <img src= {{ df_movies_links[df_movies_links['title']==title]["image_link"].values[0] }} alt = "Image">
+      <div class = "movie-info">
+        <div class = "border-bottom row" style = "margin-bottom: 16px; padding-bottom: 8px;">
+           <div class = "col-9">
+        <h3>{{ title}}</h3>
+             {% for genre in df_movies_links[df_movies_links['title']==title]["genres"].values[0].split("|") %}
+        <button type="button" class="btn btn-outline-primary" style = "background-color:#22254b;  border-radius: 50px; margin-bottom:10px;  margin-top:0px; padding:5px 7px; color:#fff">{{genre}}</button>
+            {% endfor %}
+       
+        <span class = "green">{{movie_merge[movie_merge['title']==title]["average_rating"].values[0]}}</span>
+      </div>
+           <div class = "col">
             <span ><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-eye" viewBox="0 0 16 16" style = "margin-top:20px;">
   <path d="M16 8s-3-5.5-8-5.5S0 8 0 8s3 5.5 8 5.5S16 8 16 8zM1.173 8a13.133 13.133 0 0 1 1.66-2.043C4.12 4.668 5.88 3.5 8 3.5c2.12 0 3.879 1.168 5.168 2.457A13.133 13.133 0 0 1 14.828 8c-.058.087-.122.183-.195.288-.335.48-.83 1.12-1.465 1.755C11.879 11.332 10.119 12.5 8 12.5c-2.12 0-3.879-1.168-5.168-2.457A13.134 13.134 0 0 1 1.172 8z"/>
   <path d="M8 5.5a2.5 2.5 0 1 0 0 5 2.5 2.5 0 0 0 0-5zM4.5 8a3.5 3.5 0 1 1 7 0 3.5 3.5 0 0 1-7 0z"/>
@@ -608,14 +780,81 @@ main{
          </div>
       {% endfor %}
 
+        </main>
 
-    </main>
-    <div class="pagination">
-        <div class="page" id="prev">Previous Page</div>
-        <div class="current" id="current">1</div>
-        <div class="page" id="next">Next Page</div>
+  <h2  class="film-bar">
+    <span style = "margin-left: 25px; font-size: 30px;">Top des 10 Films Actions les plus populaires</span>
+  </h2>
 
+
+        <main id="main">
  
+      {% for title in recommended_popularity_comedy %}
+      <div class = "movie">
+      <img src= {{ df_movies_links[df_movies_links['title']==title]["image_link"].values[0] }} alt = "Image">
+      <div class = "movie-info">
+        <div class = "border-bottom row" style = "margin-bottom: 16px; padding-bottom: 8px;">
+           <div class = "col-9">
+        <h3>{{ title}}</h3>
+                          {% for genre in df_movies_links[df_movies_links['title']==title]["genres"].values[0].split("|") %}
+        <button type="button" class="btn btn-outline-primary" style = "background-color:#22254b;  border-radius: 50px; margin-bottom:10px;  margin-top:0px; padding:5px 7px; color:#fff">{{genre}}</button>
+            {% endfor %}
 
-</body>
-</html>
+               <span class = "green">{{movie_merge[movie_merge['title']==title]["average_rating"].values[0]}}</span>
+      </div>
+           <div class = "col">
+            <span ><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-eye" viewBox="0 0 16 16" style = "margin-top:20px;">
+  <path d="M16 8s-3-5.5-8-5.5S0 8 0 8s3 5.5 8 5.5S16 8 16 8zM1.173 8a13.133 13.133 0 0 1 1.66-2.043C4.12 4.668 5.88 3.5 8 3.5c2.12 0 3.879 1.168 5.168 2.457A13.133 13.133 0 0 1 14.828 8c-.058.087-.122.183-.195.288-.335.48-.83 1.12-1.465 1.755C11.879 11.332 10.119 12.5 8 12.5c-2.12 0-3.879-1.168-5.168-2.457A13.134 13.134 0 0 1 1.172 8z"/>
+  <path d="M8 5.5a2.5 2.5 0 1 0 0 5 2.5 2.5 0 0 0 0-5zM4.5 8a3.5 3.5 0 1 1 7 0 3.5 3.5 0 0 1-7 0z"/>
+</svg>
+              <span> {{movie_merge[movie_merge['title']==title]["number_user"].values[0]}}
+             </span>
+          </span>
+          </div>
+      </div>
+      <div class = "overview" style = "position:absolute; background-color: #fff; padding: 1rem; color:black; max-height: 100%; ">
+        <h3> overview</h3>
+        <p>{{df_movies_links[df_movies_links['title']==title]["description"].values[0] }}</p>
+        </div>
+      </div>
+        </div>
+         
+      {% endfor %}
+
+        </main>
+<h2  class="film-bar" ">
+  <span style = "margin-left: 25px; padding-bottom: 8px;"">Top Films Adventure </span></h2>
+  
+        <main id="main">
+      {% for title in recommended_popularity_adventure %}
+      <div class = "movie">
+      <img src= {{ df_movies_links[df_movies_links['title']==title]["image_link"].values[0] }} alt = "Image">
+      <div class = "movie-info">
+        <div class = "border-bottom row" style = "margin-bottom: 16px; padding-bottom: 8px;">
+           <div class = "col-9">
+        <h3>{{ title}}</h3>
+         {% for genre in df_movies_links[df_movies_links['title']==title]["genres"].values[0].split("|") %}
+        <button type="button" class="btn btn-outline-primary" style = "background-color:#22254b;  border-radius: 50px; margin-bottom:10px;  margin-top:0px; padding:5px 7px; color:#fff">{{genre}}</button>
+            {% endfor %}
+        <span class = "green">{{movie_merge[movie_merge['title']==title]["average_rating"].values[0]}}</span>
+      </div>
+           <div class = "col">
+            <span ><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-eye" viewBox="0 0 16 16" style = "margin-top:20px;">
+  <path d="M16 8s-3-5.5-8-5.5S0 8 0 8s3 5.5 8 5.5S16 8 16 8zM1.173 8a13.133 13.133 0 0 1 1.66-2.043C4.12 4.668 5.88 3.5 8 3.5c2.12 0 3.879 1.168 5.168 2.457A13.133 13.133 0 0 1 14.828 8c-.058.087-.122.183-.195.288-.335.48-.83 1.12-1.465 1.755C11.879 11.332 10.119 12.5 8 12.5c-2.12 0-3.879-1.168-5.168-2.457A13.134 13.134 0 0 1 1.172 8z"/>
+  <path d="M8 5.5a2.5 2.5 0 1 0 0 5 2.5 2.5 0 0 0 0-5zM4.5 8a3.5 3.5 0 1 1 7 0 3.5 3.5 0 0 1-7 0z"/>
+</svg>
+              <span> {{movie_merge[movie_merge['title']==title]["number_user"].values[0]}}
+             </span>
+          </span>
+          </div>
+      <div class = "overview" style = "position:absolute; background-color: #fff; padding: 1rem; color:black; max-height: 100%; ">
+        <h3> overview</h3>
+        <p>{{df_movies_links[df_movies_links['title']==title]["description"].values[0] }}</p>
+        </div>
+      </div>
+        </div>
+         </div>
+      {% endfor %}
+
+        </main>
+   </div>

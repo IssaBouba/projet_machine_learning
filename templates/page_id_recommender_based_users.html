@@ -577,7 +577,7 @@ main{
  <header class="navbar">
         <h1>Recommender System Project</h1>
         <ul>
-            <li><a href="#">Accueil</a></li>
+            <li><a href="/">Accueil</a></li>
             <li><a href="#">À propos</a></li>
             <li><a href="#">Contact</a></li>
         </ul>
@@ -586,13 +586,18 @@ main{
     <!-- Contenu principal -->
     <div class="container">
         <h1 class="mt-4">Movie Recommendations</h1>
-        <form action="/recommendations_based_users" method="POST" class="mt-4">
- <div class="form-group">
-                <label for="user_id">User ID:</label>
-                <input type="number" id="user_id" name="user_id" class="form-control" required>
-            </div>
-            <button type="submit" class="btn btn-primary">Get Recommendations</button>
-        </form>
+  <form action="/recommendations_based_users" method="POST" class="mt-4">
+  <div class="form-group">
+    <label for="user_id" style="color: white;"><h3 style="font-size: 40px; margin-right: 45px">User ID :</h3></label>
+    <select class="form-select form-select-lg mb-3 custom-select" id="user_id" name="user_id" required>
+      <option selected>--select--</option>
+      {% for user_id in users_id %}
+      <option value="{{user_id}}">{{user_id}}</option>
+      {% endfor %}
+    </select>
+  </div>
+  <button type="submit" class="btn btn-primary">Get Recommendations</button>
+</form>
  </div>
     <!-- Pied de page -->
     <!-- <div class="footer">

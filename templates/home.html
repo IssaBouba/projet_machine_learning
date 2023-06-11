@@ -569,10 +569,126 @@ main{
         width: 400px; /* Adjust the width as needed */
     }
 
-    
-   
+    .title-film{
+      margin-top: 0px;
+      padding-bottom: 7px;
+      padding-top: 7px;
+    }
+   .span-film-popular{
+     margin-left: 25px;
+     font-size: 30px;
+     
+   }
+   .block-title-film{
+     margin-bottom: 5px;
+     padding-bottom: 4px;
+     
+   }
+   .block-genre-film{
+     background-color:#22254b;  
+     border-radius: 50px; 
+     margin-bottom:10px;  
+     margin-top:0px; 
+     padding:5px 7px; 
+     color:#fff;
+     
+   }
+   .span-average-film{
+     margin-top:10px;
+     
+   }
+   .vue-film{
+     margin-top:20px;
+   }
+   .commentaire-film{
+     position:absolute; 
+     background-color: #fff; 
+     padding: 1rem; 
+     color:black; 
+     max-height: 100%; 
+     
+   }
+   .custom-select {
+  position: relative;
+  display: inline-block;
+  width: 400px; /* Ajustez la largeur selon vos besoins */
+  height: 38px;
+  line-height: 38px;
+  background-color: #fff;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  padding: 0 10px;
+  cursor: pointer;
+  overflow: hidden;
+}
+
+.custom-select select {
+  width: 100%;
+  height: 100%;
+  border: none;
+  outline: none;
+  background-color: transparent;
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+}
+
+.custom-select::after {
+  content: '\f078';
+  font-family: 'FontAwesome';
+  position: absolute;
+  top: 50%;
+  right: 10px;
+  transform: translateY(-50%);
+  font-size: 12px;
+  color: #555;
+  pointer-events: none;
+}
+
+.custom-select.open::after {
+  content: '\f077';
+}
+
+.custom-select.open select {
+  border-radius: 4px 4px 0 0;
+  border-bottom: none;
+}
+
+.custom-select.open ~ .select-items {
+  display: block;
+}
+
+.select-items {
+  position: absolute;
+  display: none;
+  background-color: #fff;
+  border: 1px solid #ccc;
+  border-top: none;
+  border-radius: 0 0 4px 4px;
+  top: 100%;
+  left: 0;
+  right: 0;
+  z-index: 99;
+  max-height: 200px;
+  overflow-y: auto;
+}
+
+.select-items div {
+  padding: 8px 10px;
+  cursor: pointer;
+}
+
+.select-items div:hover {
+  background-color: #f4f4f4;
+}
+
+.select-items .selected {
+  background-color: #f4f4f4;
+}
+
+
     </style>  
-  
+
   <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
 
@@ -581,59 +697,118 @@ main{
     <header class="navbar">
         <h1> <span style = "margin-left: 25px; margin-bottom: 10px; padding-bottom: 8px; font-size: 100%;"">Projet ML : Système de Recommendation de Films </span></h1>
         <ul>
-            <li><a href="#">Accueil</a></li>
+            <li><a href="/">Accueil</a></li>
             <li><a href="#">À propos</a></li>
             <li><a href="#">Contact</a></li>
         </ul>
     </header>
-   <div class="buttons" style = "margin-bottom: 0px; padding-bottom: 4px;">
-
+   <div class="buttons" style = "margin-bottom: 400px; padding-bottom: 4px;">
+ <form action="/page_identification_based_item" class="mt-4">
+   <button type="submit" class="btn btn-primary">Méthode basée sur les items</button>
+   </form>
+   <form action="/page_identification_based_user"  class="mt-4">
+   <button type="submit" class="btn btn-primary">Méthode basée sur les utilisateurs</button>
+     </form>
+<form action="/popular_film"  class="mt-4">
+   <button type="submit" class="btn btn-primary">Méthode basée sur la popularité</button>
+     </form>
     </div> 
-<div style="display: flex; justify-content: center;">
-  <div style="margin-left: 4px; margin-right: 20px;">
+<!-- <div style="display: flex; justify-content: center;">
+ <div style="margin-left: 4px; margin-right: 20px;">
     <label for="method-type" style="color: white;"><h3 style="font-size: 20px;">Sélectionner le type de méthode :</h3></label>
     <div style="size: 45px;">
-      <select class="form-select form-select-lg mb-3 custom-select" aria-label=".form-select-lg example">
-        <option selected>Open this select menu</option>
-        <option value="1">One</option>
-        <option value="2">Two</option>
-        <option value="3">Three</option>
-      </select>
+        <select class="form-select form-select-lg mb-3 custom-select" id="method-type" aria-label=".form-select-lg example">
+            <option selected>--selectionner--</option>
+            <option value="contain-based">Méthode basée sur les items</option>
+            <option value="user-based">Méthode basée sur les utilisateurs</option>
+            <option value="popular-based">Méthode basée sur la popularité</option>
+        </select>
     </div>
-  </div>
-  <div style="margin-left: 20px; margin-right: 20px;">
-    <label for="method-type" style="color: white;"><h3 style="font-size: 20px;">Sélectionner le film :</h3></label>
+</div>
+
+<div id="film-selection" style="margin-left: 20px; margin-right: 20px; display: none;">
+    <label for="film-select" style="color: white;"><h3 style="font-size: 20px;">Sélectionner le film :</h3></label>
     <div style="size: 45px;">
-      <select class="form-select form-select-lg mb-3 custom-select" aria-label=".form-select-lg example">
-        <option selected>Open this select menu</option>
-        <option value="1">One</option>
-        <option value="2">Two</option>
-        <option value="3">Three</option>
-      </select>
+        <select class="form-select form-select-lg mb-3 custom-select" id="film-select" aria-label=".form-select-lg example">
+            <option selected>--selectionner--</option>
+            {% for title in df_movies_links['title'] %}
+            <option value="{{title}}">{{title}}</option>
+            {% endfor %}
+        </select>
     </div>
-  </div>
-  <div style="margin-left: 20px; margin-right: 20px;">
-    <label for="method-type" style="color: white;"><h3 style="font-size: 20px;">Sélectionner l'utilisateur :</h3></label>
+</div>
+
+<div id="user-selection" style="margin-left: 20px; margin-right: 20px; display: none;">
+    <label for="user-select" style="color: white;"><h3 style="font-size: 20px;">Sélectionner l'utilisateur :</h3></label>
     <div style="size: 45px;">
-      <select class="form-select form-select-lg mb-3 custom-select" aria-label=".form-select-lg example">
-        <option selected>Open this select menu</option>
-        <option value="1">One</option>
-        <option value="2">Two</option>
-        <option value="3">Three</option>
-      </select>
+        <select class="form-select form-select-lg mb-3 custom-select" id="user-select" aria-label=".form-select-lg example">
+            <option selected>--selectionner--</option>
+            {% for user in users_id %}
+            <option value="{{user}}">Utilisateur {{user}}</option>
+            {% endfor %}
+        </select>
     </div>
-  </div>
- 
+</div>
+
+<script>
+    document.getElementById("method-type").addEventListener("change", function() {
+        var filmSelectionDiv = document.getElementById("film-selection");
+        var userSelectionDiv = document.getElementById("user-selection");
+        
+        if (this.value === "contain-based") {
+            filmSelectionDiv.style.display = "block";
+            userSelectionDiv.style.display = "none";
+        } else if (this.value === "user-based") {
+            filmSelectionDiv.style.display = "none";
+            userSelectionDiv.style.display = "block";
+        } else {
+            filmSelectionDiv.style.display = "none";
+            userSelectionDiv.style.display = "none";
+        }
+    });
+</script>
+
 </div>
 </div>
-    <div style="display: flex; justify-content: center; margin-bottom:30px">
-   <button type="submit" class="btn btn-primary">Get Recommendations</button>
-  </div>
- 
-    
-   
-<h2  class="film-bar title-film" style = "margin-top: 0px; padding-bottom: 7px;padding-top: 7px;">
-  <span style = "margin-left: 25px; font-size: 30px;">Films les plus populaires</span>
+   <div style="display: flex; justify-content: center; margin-bottom:30px; margin-top:30px">
+  <style>
+    .get-valide-film {
+      display: inline-block;
+      padding: 10px 20px;
+      font-size: 16px;
+      font-weight: bold;
+      text-align: center;
+      text-decoration: none;
+      white-space: nowrap;
+      background-color: #007bff;
+      color: #fff;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+
+    .get-valide-film:hover {
+      background-color: #0069d9;
+    }
+
+    .btn.btn-primary {
+      background-color: #007bff;
+      color: #fff;
+    }
+
+    .btn.btn-primary:hover {
+      background-color: #0069d9;
+    }
+  </style>
+  <button type="submit" class="btn btn-primary get-valide-film">Get Recommendations</button>
+</div>
+
+<div id = "film-based-items">
+
+</div>
+   <div id = "popular-film">
+<h2  class="film-bar title-film" >
+  <span class = "span-film-popular">Films les plus populaires</span>
 </h2>
         <main id="main">
  
@@ -641,19 +816,19 @@ main{
       <div class = "movie">
       <img src= {{ df_movies_links[df_movies_links['title']==title]["image_link"].values[0] }} alt = "Image">
       <div class = "movie-info">
-        <div class = "border-bottom row" style = "margin-bottom: 5px; padding-bottom: 4px;">
+        <div class = "border-bottom row block-title-film">
            <div class = "col-9">
         <h3>{{ title}}</h3>
              {% for genre in df_movies_links[df_movies_links['title']==title]["genres"].values[0].split("|") %}
-        <button type="button" class="btn btn-outline-primary" style = "background-color:#22254b;  border-radius: 50px; margin-bottom:10px;  margin-top:0px; padding:5px 7px; color:#fff">{{genre}}</button>
+        <button type="button" class="btn btn-outline-primary block-genre-film">{{genre}}</button>
             {% endfor %}
         
         
       </div>
-          <div class = "col"><span class = "green" style = "margin-top:10px;">{{movie_merge[movie_merge['title']==title]["average_rating"].values[0]}}</span></div>
+          <div class = "col"><span class = "green span-average-film">{{movie_merge[movie_merge['title']==title]["average_rating"].values[0]}}</span></div>
           
           <div class = "col">
-            <span ><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-eye" viewBox="0 0 16 16" style = "margin-top:20px;">
+            <span ><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-eye vue-film" viewBox="0 0 16 16">
   <path d="M16 8s-3-5.5-8-5.5S0 8 0 8s3 5.5 8 5.5S16 8 16 8zM1.173 8a13.133 13.133 0 0 1 1.66-2.043C4.12 4.668 5.88 3.5 8 3.5c2.12 0 3.879 1.168 5.168 2.457A13.133 13.133 0 0 1 14.828 8c-.058.087-.122.183-.195.288-.335.48-.83 1.12-1.465 1.755C11.879 11.332 10.119 12.5 8 12.5c-2.12 0-3.879-1.168-5.168-2.457A13.134 13.134 0 0 1 1.172 8z"/>
   <path d="M8 5.5a2.5 2.5 0 1 0 0 5 2.5 2.5 0 0 0 0-5zM4.5 8a3.5 3.5 0 1 1 7 0 3.5 3.5 0 0 1-7 0z"/>
 </svg>
@@ -661,7 +836,7 @@ main{
              </span>
           </span>
           </div>
-      <div class = "overview" style = "position:absolute; background-color: #fff; padding: 1rem; color:black; max-height: 100%; ">
+      <div class = "overview commentaire-film" >
         <h3> overview</h3>
         <p>{{df_movies_links[df_movies_links['title']==title]["description"].values[0] }}</p>
         </div>
@@ -785,7 +960,8 @@ main{
       {% endfor %}
 
         </main>
-
+   </div>
+-->
     <div class="footer">
         &copy; 2023 Recommender System Project
     </div>
