@@ -1,63 +1,33 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Movie Recommendations</title>
-    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet">
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet">
-    <style>
-        /* Ajoutez ici votre propre style CSS si nécessaire */
-    </style>
-</head>
-<body>
-    <div class="container mt-4">
-        <h1 class="mb-4">Movie Recommendations</h1>
-        
-        <div class="row">
-            {% for movie in recommended_movies_genres %}
-            <div class="col-md-6">
-                <div class="card mb-4">
-                    <div class="card-body">
-                        <h5 class="card-title">{{ movie }}</h5>
-                        <p class="card-text">Genre : {{ movie_genre[movie_genre['title'] == movie]["genres"].values[0] }}</p>
-                       
-                    </div>
-                </div>
-            </div>
-            {% endfor %}
-          
-        </div>
-      <h3>Recommended Movies (based on collaborative filtering):</h3>
-    <ul>
-        {% for movie_title, movie_genre in zip(recommended_movies_collaborative_title, recommended_movies_collaborative_genres) %}
-            
-            <li>{{ movie_title }}</li>
-            <li>{{ movie_genre }}</li>
-        {% endfor %}
-    </ul>
-    </div>
-
-   
-</body>
-</html>
-
-
-
-
-
-@app.route("/recommendations", methods=['GET', 'POST'])
-def recommendations():
+@app.route("/recommendations_based_users", methods=['GET', 'POST'])
+def recommendations_users():
     if request.method == 'POST':
         user_id = int(request.form['user_id'])
         movie_title = request.form['movie_title']
+        interv = zip(get_recommendations_collaborative(user_id = user_id, title = True), get_recommendations_collaborative(user_id = user_id,title =False))
         
-        recommended_movies_genres = get_recommendations_genres(movie_title)
-        recommended_movies_collaborative_title = get_recommendations_collaborative(user_id)['title']
-        recommended_movies_collaborative_genres = get_recommendations_collaborative(user_id)['genres']
         
-        return render_template('recommendations.html',
+        return render_template('recommender_based_user.html',
                                user_id=user_id,
-                               movie_title=movie_title,              recommended_movies_genres=recommended_movies_genres,
-                               recommended_movies_collaborative_title=recommended_movies_collaborative_title, recommended_movies_collaborative_genres = recommended_movies_collaborative_genres)
-    else:
-        return render_template('index.html')
+                               movie_title=movie_title,
+                               df_movies_links = df_movies_links,interv = interv)
 
+
+
+
+#@app.route("/recommendations", methods=['GET', 'POST'])
+#def recommendations():
+#    if request.method == 'POST':
+#        user_id = int(request.form['user_id'])
+#        movie_title = request.form['movie_title']
+ #       recommended_movies_popularity = get_recommendations_popularity()
+  #      recommended_movies_genres = get_recommendations_genres(movie_title)
+  #      interv = zip(get_recommendations_collaborative(user_id = user_id, title = True), get_recommendations_collaborative(user_id = user_id,title =False))
+        
+        return render_template('recommender_based_item.html',
+                               user_id=user_id,
+                               movie_title=movie_title,
+                               df_movies = df_movies,
+                               movie_merge = movie_merge,
+                               recommended_movies_popularity=recommended_movies_popularity,
+                               recommended_movies_genres=recommended_movies_genres,
+                              interv = interv)

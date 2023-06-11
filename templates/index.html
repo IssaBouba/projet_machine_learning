@@ -26,7 +26,30 @@
     <!-- Contenu principal -->
     <div class="container">
         <h1 class="mt-4">Movie Recommendations</h1>
-        <form action="/recommendations" method="POST" class="mt-4">
+        <form action="/recommendations_based_item" method="POST" class="mt-4">
+            <div class="form-group">
+                <label for="user_id">User ID:</label>
+                <input type="number" id="user_id" name="user_id" class="form-control" required>
+            </div>
+            <div class="form-group">
+                <label for="movie_title">Movie Title:</label>
+                <input type="text" id="movie_title" name="movie_title" class="form-control" required>
+            </div>
+            <button type="submit" class="btn btn-primary">Get Recommendations</button>
+        </form>
+      <form action="/recommendations_based_users" method="POST" class="mt-4">
+            <div class="form-group">
+                <label for="user_id">User ID:</label>
+                <input type="number" id="user_id" name="user_id" class="form-control" required>
+            </div>
+            <div class="form-group">
+                <label for="movie_title">Movie Title:</label>
+                <input type="text" id="movie_title" name="movie_title" class="form-control" required>
+            </div>
+            <button type="submit" class="btn btn-primary">Get Recommendations</button>
+        </form>
+      <p>Recommended Movies (based on popularity)</p>
+      <form action="/recommender_based_popularity" method="POST" class="mt-4">
             <div class="form-group">
                 <label for="user_id">User ID:</label>
                 <input type="number" id="user_id" name="user_id" class="form-control" required>
