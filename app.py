@@ -1,13 +1,10 @@
 import flask
-import csv
 from flask import Flask, render_template, request
-import difflib
 import pandas as pd
 import numpy as np
 from sklearn.feature_extraction.text import CountVectorizer
 from sklearn.metrics.pairwise import cosine_similarity
-import random
-import requests
+
 
 app = flask.Flask(__name__, template_folder='templates')
 
